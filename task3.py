@@ -54,4 +54,32 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+# 3.5 Scaling images using 500ms Reference
+ref_time = 500
+ref_offset = poly_func(ref_time)
+scaled_images = {}
+for time_ms, image in images.items():
+    if time_ms == 500:
+        continue
+    predicted_offset = poly_func(time_ms)
+    scale_factor = ref_offset / predicted_offset
+    scaled_image = image * scale_factor
+    scaled_images[time_ms] = scaled_image
+    output_path = rf"C:\Users\sa995420\OneDrive - Varex Imaging\Documents\varex_zip_files for tasks\tasks\Task3_outputs\Task 3.5\Scaled images\scaled_{time_ms}ms.raw"
+    scaled_image.astype(np.uint16).tofile(output_path)
+    print(f"Scaled image saved for {time_ms} ms")
+
+# 3.6 subtract reference images from scaled image
+ref_image = images[500].astype(np.float32)
+subtracted_images = {}
+for time_ms, scaled_image in scaled_images.items():
+    scaled_float = scaled_image.astype(np.float32)
+    subtracted = scaled_float - ref_image
+    subtracted_images[time_ms] = subtracted
+    output_path = rf"C:\Users\sa995420\OneDrive - Varex Imaging\Documents\varex_zip_files for tasks\tasks\Task3_outputs\Task 3.5\Subtracted images\subtracted_{time_ms}ms.raw"
+    subtracted.astype(np.int16).tofile(output_path)
+    print(f"Subtracted image saved for {time_ms} ms")
+
+
+
 
