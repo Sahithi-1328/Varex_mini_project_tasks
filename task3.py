@@ -76,10 +76,28 @@ for time_ms, scaled_image in scaled_images.items():
     scaled_float = scaled_image.astype(np.float32)
     subtracted = scaled_float - ref_image
     subtracted_images[time_ms] = subtracted
-    output_path = rf"C:\Users\sa995420\OneDrive - Varex Imaging\Documents\varex_zip_files for tasks\tasks\Task3_outputs\Task 3.5\Subtracted images\subtracted_{time_ms}ms.raw"
+    output_path = rf"C:\Users\sa995420\OneDrive - Varex Imaging\Documents\varex_zip_files for tasks\tasks\Task3_outputs\Task 3.6\Subtracted images\subtracted_{time_ms}ms.raw"
     subtracted.astype(np.int16).tofile(output_path)
     print(f"Subtracted image saved for {time_ms} ms")
 
 
+# 3.7 standard deviation vs integration time
 
 
+std_times = []
+std_values = []
+
+for time_ms, sub_img in subtracted_images.items():
+    std_dev = np.std(sub_img)
+    std_times.append(time_ms)
+    std_values.append(std_dev)
+    print(f"Integration time: {time_ms} ms -> Std deviation: {std_dev:.2f}")
+
+# Plot standard deviation vs integration time
+plt.figure(figsize=(6, 4))
+plt.plot(std_times, std_values, marker='o')
+plt.xlabel("Integration Time (ms)")
+plt.ylabel("Standard Deviation (ADU)")
+plt.title("Noise (Std Dev) vs Integration Time")
+plt.grid(True)
+plt.show()
